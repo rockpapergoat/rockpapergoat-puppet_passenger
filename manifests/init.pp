@@ -5,4 +5,6 @@
 class puppet-passenger {
 	include puppetserver
 	include httpd-passenger
+	
+	Class["puppetserver"] -> Class["httpd-passenger"]
 }

@@ -47,6 +47,8 @@ class httpd-passenger {
 	    }
 
 	service { "httpd":
+		ensure => running,
+		enable => true,
 	}
 
 	    package { ["httpd-itk",  "httpd", "mod_ssl", "httpd-devel", 
@@ -64,6 +66,6 @@ class httpd-passenger {
 	    exec { "/usr/bin/passenger-install-apache2-module --auto":
 	      subscribe => Package["passenger"],
 	      before => Service["httpd"],
-	      require => Package["passenger"],
+          creates => "/usr/lib/ruby/gems/1.8/gems/$passenger_version/ext/apache2/mod_passenger.so",
 	    }
 }

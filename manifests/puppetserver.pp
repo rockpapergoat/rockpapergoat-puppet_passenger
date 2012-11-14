@@ -3,8 +3,8 @@
 #
 class puppetserver {
 	
-	package {"puppet-server":
-      ensure => installed,
+	package {["puppet", "puppet-server"]:
+      ensure => latest,
   }
 
 	# we need to stop and start the service at least once
@@ -12,7 +12,14 @@ class puppetserver {
 	service {"puppetmaster":
 		ensure => running,
 		enable => false,
+		require => Package["puppet-server"],
+	}
+	
+	exec { "stopmaster":
+		command => "service puppetmaster stop",
+		path => "/usr/bin:/usr/sbin:/bin:/usr/local/bin",
+		refreshonly => true,
+		require => Service["puppetmaster"],
 	}
 }
 
-Service["puppetmaster"] {ensure => stopped}
