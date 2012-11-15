@@ -2,7 +2,7 @@
 # variables for core packages, service names, etc.
 #
 class puppet-passenger::params {
-	case $osfamily {
+  case $osfamily {
 		"redhat": {
 			$core_packages = ["httpd-itk",  "httpd", "mod_ssl", "httpd-devel", 
 		    "apr-util", "apr-util-devel", "openssl-devel", "libcurl-devel", 
@@ -27,5 +27,5 @@ class puppet-passenger::params {
 			}
 		}
 	}
-}
 
+}
