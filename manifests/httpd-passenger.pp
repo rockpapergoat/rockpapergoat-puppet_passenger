@@ -17,55 +17,53 @@ class httpd-passenger {
 	  owner => puppet,
 	  group => root,
 	}
-	file { "/etc/httpd/conf.d/puppetmasterd.conf":
+	file { "$apache_conf_dir/puppetmasterd.conf":
 	  ensure => present,
 	  content => template("puppet-passenger/httpd.conf.erb"),
 	  mode => 0644,
 	  owner => root,
 	  group => root,
-	  require => [File["/etc/puppet/rack/config.ru"], File["/etc/puppet/rack/public"], Package["httpd"], Package["passenger"]],
+	  require => [File["/etc/puppet/rack/config.ru"], File["/etc/puppet/rack/public"], Package[$apache_name], Package["passenger"]],
 	  notify => Service["httpd"],
 	}
 
-	file { "/etc/httpd/conf.d/passenger.conf":
+	file { "$apache_conf_dir/passenger.conf":
 	  ensure => present,
 	  content => template("puppet-passenger/passenger.conf.erb"),
 	  mode => 0644,
 	  owner => root,
 	  group => root,
-	  require => [File["/etc/puppet/rack/config.ru"], File["/etc/puppet/rack/public"], Package["httpd"], Package["passenger"]],
+	  require => [File["/etc/puppet/rack/config.ru"], File["/etc/puppet/rack/public"], Package[$apache_name], Package["passenger"]],
 	  notify => Service["httpd"],
 	}
 
-	package { ["rack", "passenger"]:
+	package { $core_gems:
 	  ensure => installed,
 	  provider => "gem",
 	}
 
-	    Service["httpd"] {
-	      require => Package["httpd"],
+	    Service[$apache_name] {
+	      require => Package[$apache_name],
 	    }
 
-	service { "httpd":
+	service { $apache_name:
 		ensure => running,
 		enable => true,
 	}
 
-	    package { ["httpd-itk",  "httpd", "mod_ssl", "httpd-devel", 
-	    "apr-util", "apr-util-devel", "openssl-devel", "libcurl-devel", 
-	    "zlib-devel", "gcc-c++", "ruby-devel", "rubygem-rake", "rubygem-passenger"]:
+	    package { $core_packages:
 	      ensure => installed,
 	    }
 
     
-	    file { "/etc/httpd/conf.d/ssl.conf":
+	    file { "$apache_conf_dir/ssl.conf":
 	      ensure => "present",
-	      notify => Service["httpd"],
+	      notify => Service[$apache_name],
 	      require => Package["mod_ssl"],
 	    }
 	    exec { "/usr/bin/passenger-install-apache2-module --auto":
 	      subscribe => Package["passenger"],
-	      before => Service["httpd"],
+	      before => Service[$apache_name],
           creates => "/usr/lib/ruby/gems/1.8/gems/$passenger_version/ext/apache2/mod_passenger.so",
 	    }
 }
