@@ -5,6 +5,7 @@
 class puppet-passenger {
 	include puppetserver
 	include httpd-passenger
+	include yumrepos
 	
-	Class["puppetserver"] -> Class["httpd-passenger"]
+	Class["yumrepos"] -> Class["puppetserver"] -> Class["httpd-passenger"]
 }

@@ -5,6 +5,7 @@ class puppetserver {
 	
 	package {["puppet", "puppet-server"]:
       ensure => latest,
+      require => File["/etc/yum.repos.d/puppetlabs.repo"]
   }
 
 	# we need to stop and start the service at least once
