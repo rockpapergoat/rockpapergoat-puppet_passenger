@@ -8,6 +8,6 @@ class yumrepos {
     
     file { "/etc/yum.repos.d/puppetlabs.repo":
 	   ensure => file,
-	   content => template("puppet-passenger/puppetlabs.repo.erb")
+	   content => template("puppetpassenger/puppetlabs.repo.erb")
 	}
 }

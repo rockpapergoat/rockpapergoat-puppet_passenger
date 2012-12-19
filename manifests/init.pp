@@ -2,10 +2,11 @@
 # centos/rhel specific reworking of the passenger config install
 # provided by puppetlabs under /usr/share/puppet/ext/rack/ (as of puppet 3.0.1)
 
-class puppet-passenger {
+class puppetpassenger {
+    $passenger_version = "3.0.18"
 	include puppetserver
-	include httpd-passenger
+	include httpdpassenger
 	include yumrepos
 	
-	Class["yumrepos"] -> Class["puppetserver"] -> Class["httpd-passenger"]
+	Class["yumrepos"] -> Class["puppetserver"] -> Class["httpdpassenger"]
 }

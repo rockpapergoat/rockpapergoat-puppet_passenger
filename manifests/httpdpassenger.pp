@@ -1,7 +1,7 @@
-# Class: httpd-passenger
+# Class: httpdpassenger
 #
 #
-class httpd-passenger {
+class httpdpassenger {
 
 
 	file { ["/etc/puppet/rack", "/etc/puppet/rack/public"]:
@@ -12,14 +12,14 @@ class httpd-passenger {
 	}
 	file { "/etc/puppet/rack/config.ru":
 	  ensure => present,
-	  content => template("puppet-passenger/config.ru.erb"),
+	  content => template("puppetpassenger/config.ru.erb"),
 	  mode => 0644,
 	  owner => puppet,
 	  group => root,
 	}
 	file { "/etc/httpd/conf.d/puppetmasterd.conf":
 	  ensure => present,
-	  content => template("puppet-passenger/httpd.conf.erb"),
+	  content => template("puppetpassenger/httpd.conf.erb"),
 	  mode => 0644,
 	  owner => root,
 	  group => root,
@@ -29,7 +29,7 @@ class httpd-passenger {
 
 	file { "/etc/httpd/conf.d/passenger.conf":
 	  ensure => present,
-	  content => template("puppet-passenger/passenger.conf.erb"),
+	  content => template("puppetpassenger/passenger.conf.erb"),
 	  mode => 0644,
 	  owner => root,
 	  group => root,
