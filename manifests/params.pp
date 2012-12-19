@@ -1,19 +1,17 @@
 # Class: puppet-passenger::params
 # variables for core packages, service names, etc.
 #
-class puppet-passenger::params {
+class puppetpassenger::params {
   case $osfamily {
 		"redhat": {
-			$core_packages = ["httpd-itk",  "httpd", "mod_ssl", "httpd-devel", 
-		    "apr-util", "apr-util-devel", "openssl-devel", "libcurl-devel", 
-		    "zlib-devel", "gcc-c++", "ruby-devel", "rubygem-rake", "rubygem-passenger"]
+			$core_packages = ['httpd-itk',  'httpd', 'mod_ssl', 'httpd-devel', 'apr-util', 'apr-util-devel', 'openssl-devel', 'libcurl-devel', 'zlib-devel', 'gcc-c++', 'ruby-devel', 'rubygem-rake', 'rubygem-passenger']
 			$apache_name = "httpd"
 			$apache_conf_dir = "/etc/httpd/conf.d"
-			$passenger_gem_version = undef
+			$passenger_gem_version = "3.0.18"
 			$core_gems = ["rack", "passenger"]
 			$puppetmaster_service = "puppetmaster"
 		}
-		"debian": {
+		"/debian/": {
 			$core_packages = undef
 			$apache_name = "apache"
 			$passenger_gem_version = undef
@@ -22,7 +20,7 @@ class puppet-passenger::params {
 		}
 
 		default: {
-			notify {"a default message":
+    		notify {"a default message":
 				message => "you're running something other than a RHEL or Debian distribution. patches are welcome."
 			}
 		}

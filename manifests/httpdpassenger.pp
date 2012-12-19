@@ -1,8 +1,13 @@
-# Class: httpd-passenger
+# Class: httpdpassenger
 #
 #
-class httpd-passenger {
+class httpdpassenger {
 
+include puppetpassenger::params
+
+    notify {"1":
+    message => "$apache_conf_dir/puppetmasterd.conf",
+    }
 
 	file { ["/etc/puppet/rack", "/etc/puppet/rack/public"]:
 	  ensure => directory,
@@ -12,32 +17,32 @@ class httpd-passenger {
 	}
 	file { "/etc/puppet/rack/config.ru":
 	  ensure => present,
-	  content => template("puppet-passenger/config.ru.erb"),
+	  content => template("puppetpassenger/config.ru.erb"),
 	  mode => 0644,
 	  owner => puppet,
 	  group => root,
 	}
 	file { "$apache_conf_dir/puppetmasterd.conf":
 	  ensure => present,
-	  content => template("puppet-passenger/httpd.conf.erb"),
+	  content => template("puppetpassenger/httpd.conf.erb"),
 	  mode => 0644,
 	  owner => root,
 	  group => root,
 	  require => [File["/etc/puppet/rack/config.ru"], File["/etc/puppet/rack/public"], Package[$apache_name], Package["passenger"]],
-	  notify => Service["httpd"],
+	  notify => Service[$apache_name],
 	}
 
 	file { "$apache_conf_dir/passenger.conf":
 	  ensure => present,
-	  content => template("puppet-passenger/passenger.conf.erb"),
+	  content => template("puppetpassenger/passenger.conf.erb"),
 	  mode => 0644,
 	  owner => root,
 	  group => root,
 	  require => [File["/etc/puppet/rack/config.ru"], File["/etc/puppet/rack/public"], Package[$apache_name], Package["passenger"]],
-	  notify => Service["httpd"],
+	  notify => Service[$apache_name],
 	}
 
-	package { $core_gems:
+	package { puppetpassenger::params::$core_gems:
 	  ensure => installed,
 	  provider => "gem",
 	}
@@ -51,7 +56,7 @@ class httpd-passenger {
 		enable => true,
 	}
 
-	    package { $core_packages:
+	    package { puppetpassenger::params::$core_packages:
 	      ensure => installed,
 	    }
 

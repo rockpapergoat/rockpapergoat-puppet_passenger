@@ -12,7 +12,7 @@ class puppetserver {
 	# to generate certs
 	service {"puppetmaster":
 		ensure => running,
-		enable => false,
+		enable => true,
 		require => Package["puppet-server"],
 	}
 	
